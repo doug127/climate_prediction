@@ -1,0 +1,17 @@
+backend/node_modules/
+backend/.env
+backend/config/
+backend/logs/
+backend/tmp/
+backend/dist/
+backend/coverage/
+backend/.vscode/
+resources/
+*.log
+*.tmp
+*.cache
+*.pid
+*.swp
+*.log
+*.env
+*.DS_Store
