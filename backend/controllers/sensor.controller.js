@@ -128,6 +128,7 @@ export const create = async (req, res) => {
     }
 }
 
+// Method PATCH
 export const update = async (req, res) => {
     try {
         const { id } = req.params;
