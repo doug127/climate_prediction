@@ -14,11 +14,11 @@ export const Medition = sequelize.define('Medition', {
         allowNull: false,
         required: true,
     },
-    frequency: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        required: true,
-    },
+    // frequency: {
+    //     type: DataTypes.INTEGER,
+    //     allowNull: false,
+    //     required: true,
+    // },
     sensorId: {
         type: DataTypes.INTEGER,
         allowNull: false,
