@@ -11,7 +11,11 @@ export const up = async (queryInterface, Sequelize) => {
       autoIncrement: true
     },
     date: {
-      type: Sequelize.DATE,
+      type: Sequelize.DATEONLY,
+      allowNull: false,
+    },
+    frequency: {
+      type: Sequelize.INTEGER,
       allowNull: false,
     },
     sensorId: {
@@ -22,15 +26,6 @@ export const up = async (queryInterface, Sequelize) => {
       },
       onUpdate: 'CASCADE',
       onDelete: 'RESTRICT'
-    },
-    variableId: {
-      type: Sequelize.INTEGER,
-      references: {
-        model: 'variables',
-        key: 'id'
-      },
-      onUpdate: 'CASCADE',
-      onDelete: 'SET NULL'
     },
     createdAt: {
       type: Sequelize.DATE,
