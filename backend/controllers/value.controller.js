@@ -1,4 +1,4 @@
-import {Sensor, Value, Moment, Medition} from '../models/index.js'; 
+import {Sensor, Value, Moment, Medition, Variable} from '../models/index.js'; 
 import { getWeatherData } from '../services/meteostat.js';
 import {sequelize} from '../server/db.js'; 
 import { Op } from 'sequelize';
@@ -97,6 +97,88 @@ export const paginated = async (req, res) => {
         console.error('Error retrieving values:', error);
         res.status(500).json({ message: error.message });
     }
+}
+
+export const filteredValues = async (req, res) => {
+  try {
+    const { sensor, variable, limit, minValue, maxValue, startDate, endDate, sort } = req.query;
+
+    const whereClause = {};
+    const sortOrder = sort?.toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
+
+    if (minValue !== undefined || maxValue !== undefined) {
+      whereClause.value = {};
+      if (minValue !== undefined) whereClause.value[Op.gte] = parseFloat(minValue);
+      if (maxValue !== undefined) whereClause.value[Op.lte] = parseFloat(maxValue);
+    }
+
+    const meditionWhere = {};
+    if (startDate && endDate) {
+      meditionWhere.date = { [Op.between]: [startDate, endDate] };
+    } else if (startDate) {
+      meditionWhere.date = { [Op.gte]: startDate };
+    } else if (endDate) {
+      meditionWhere.date = { [Op.lte]: endDate };
+    }
+
+    const includeOptions = [
+      {
+        model: Medition,
+        attributes: ['date'],
+        where: Object.keys(meditionWhere).length ? meditionWhere : undefined,
+        include: [
+          {
+            model: Sensor,
+            attributes: ['name', 'code'],
+            where: sensor ? { name: { [Op.iLike]: `%${sensor}%` } } : undefined,
+            required: sensor || variable ? true : false,
+            include: [
+              {
+                model: Variable,
+                attributes: ['name', 'unit'],
+                where: variable ? { name: { [Op.iLike]: `%${variable}%` } } : undefined,
+                required: !!variable
+              }
+            ],
+          }
+        ],
+        required: true
+      },
+      {
+        model: Moment,
+        attributes: ['hour']
+      }
+    ];
+    
+    const values = await Value.findAll({
+      where: whereClause,
+      include: includeOptions,
+      order: [[{model: Medition}, 'date', sortOrder]],
+      limit: limit ? parseInt(limit) : undefined
+    });
+
+    // Formatear respuesta
+    const formattedValues = values.map(v => ({
+      value: v.value,
+      hour: v.Moment.hour,
+      date: v.Medition.date,
+      sensor: v.Medition.Sensor?.name,
+      variable: v.Medition.Sensor?.Variable?.name,
+      unit: v.Medition.Sensor?.Variable?.unit
+    }));
+
+    res.json({
+      count: formattedValues.length,
+      data: formattedValues
+    });
+
+  } catch (error) {
+    console.error('Error fetching filtered values:', error);
+    res.status(500).json({ 
+      message: 'Error al obtener valores filtrados',
+      error: error.message 
+    });
+  }
 }
 
 export const createValue = async (req, res) => {
