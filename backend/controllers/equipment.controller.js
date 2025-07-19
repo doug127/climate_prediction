@@ -1,4 +1,7 @@
 import {Equipment} from "../models/index.js";
+import {where, Op} from "sequelize";
+import { sequelize } from "../server/db.js";
+
 
 export const getAll = async (req, res) => {
   try {
@@ -44,8 +47,34 @@ export const paginated = async (req, res) => {
 
 export const create = async (req, res) => {
     try {
-        const newEquipment = await Equipment.create(req.body);
-        res.status(201).json(newEquipment);
+        const {serial} = req.body;
+
+        if(!serial) {
+            return res.status(400).json({ message: "Serial required" }); 
+        }
+
+        const existingSerial = await Equipment.findOne({
+            where: {
+                serial: {
+                    [Op.iLike]: serial 
+                }
+            }   
+        });
+
+        if(existingSerial){
+            return res.status(409).json({
+                message: "Serial already exists",
+                existingSerial
+            })
+        }
+
+        const newEquipment = await Equipment.create({ serial: serial.trim() });
+
+        res.status(201).json({
+            message: "Equipment register successfully",
+            newEquipment
+        });
+        
     } catch (error) {
         console.error("Error creating equipment:", error);
         res.status(500).json({ message: "Internal server error" });
@@ -55,11 +84,39 @@ export const create = async (req, res) => {
 export const update = async (req, res) => {
     try {
         const equipment = await Equipment.findByPk(req.params.id);
-        if (!equipment) {
+
+        if (!equipment){
             return res.status(404).json({ message: "Equipment not found" });
+        } 
+
+        const {serial} = req.body;
+
+        if(!serial) {
+            return res.status(400).json({ message: "Serial required" }); 
         }
+
+        const existingSerial = await Equipment.findOne({
+            where: {
+                serial: {
+                    [Op.iLike]: serial
+                },
+                id: { [Op.ne]: req.params.id }
+            }
+        });
+
+        if(existingSerial){
+            return res.status(409).json({
+                message: "Serial already exists",
+                existingSerial
+            })
+        }
+
         await equipment.update(req.body);
-        res.status(200).json(equipment);
+        res.status(200).json({
+            message: "Equipment updated successfully",
+            equipment
+        });
+
     } catch (error) {
         console.error("Error updating equipment:", error);
         res.status(500).json({ message: "Internal server error" });
