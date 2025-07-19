@@ -10,7 +10,7 @@ export const Medition = sequelize.define('Medition', {
         autoIncrement: true,
     },
     date: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
         allowNull: false,
         required: true,
     },
@@ -28,15 +28,6 @@ export const Medition = sequelize.define('Medition', {
             key: 'id'
         }
     },
-    variableId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        required: true,
-        references: {
-            model: Variable,
-            key: 'id'
-        }
-    }
 },
 {
     tableName: 'meditions',

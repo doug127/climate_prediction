@@ -12,7 +12,7 @@ export const up = async (queryInterface, Sequelize) => {
     },
     value: {
       type: Sequelize.FLOAT,
-      allowNull: false,
+      allowNull: true,
     },
     meditionId: {
       type: Sequelize.INTEGER,

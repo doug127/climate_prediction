@@ -11,7 +11,7 @@ export const Value = sequelize.define("Value", {
     },
     value: {
         type: DataTypes.FLOAT,
-        allowNull: false,
+        allowNull: true,
         required: true,
     },
     meditionId: {

@@ -16,9 +16,6 @@ Sensor.belongsTo(Equipment, { foreignKey: 'equipmentId' });
 Medition.belongsTo(Sensor, { foreignKey: 'sensorId' });
 Sensor.hasMany(Medition, { foreignKey: 'sensorId' });
 
-// ? Medition 1-1 Variable
-Medition.belongsTo(Variable, { foreignKey: 'variableId' });
-
 // ? Medition 1-M Value
 Medition.hasMany(Value, { foreignKey: 'meditionId' });
 Value.belongsTo(Medition, { foreignKey: 'meditionId' });
