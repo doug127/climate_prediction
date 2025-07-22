@@ -6,12 +6,12 @@ import { api } from '../api/apiRoutes'
 import { use, useEffect, useState } from 'react'
 
 export const Home = () => {
-const [data, setData] = useState(null);
+const [data, setData] = useState([]);
 
 useEffect( () => {
     const fetchData = async () => {
       try {
-        const response = await api.get('/'); 
+        const response = await api.get('/meta/paginated'); 
         setData(response.data);
         console.log(response.data);
       } catch (error) {
@@ -49,7 +49,7 @@ useEffect( () => {
 
            <div>
             <h1>Datos del backend:</h1>
-            {data.length > 0 ? (
+            {/* {data.length > 0 ? (
         <div>
           {data.map((item) => (
             <div key={item.id} style={{ marginBottom: '10px' }}>
@@ -63,7 +63,7 @@ useEffect( () => {
         </div>
       ) : (
         <p>Cargando datos...</p>
-      )}
+      )} */}
             </div>
            </div>
            
