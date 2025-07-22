@@ -7,6 +7,8 @@ backend/dist/
 backend/coverage/
 backend/.vscode/
 resources/
+ml_service/
+.vscode/
 *.log
 *.tmp
 *.cache
@@ -15,3 +17,4 @@ resources/
 *.log
 *.env
 *.DS_Store
+*.gitignore

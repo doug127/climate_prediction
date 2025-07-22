@@ -11,8 +11,8 @@ const router = express.Router();
 
 router.get('/', getAll);
 router.get('/:id', getById);
-router.post('/', create);
-router.patch('/:id', update);
-router.delete('/:id', destory);
+router.post('/create', create);
+router.patch('/update/:id', update);
+router.delete('/destroy/:id', destory);
 
 export default router;

@@ -1,12 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import {
-  sensorRouter, 
-  equipmentRouter, 
-  valueRouter,
-  variableRouter
-} from './routes/index.js';
+import routes from './routes/index.js';
 
 // Configuración inicial
 dotenv.config();
@@ -18,10 +13,8 @@ app.use(cors());
 app.use(express.json());
 
 // Rutas
-app.use('/api/sensor', sensorRouter);
-app.use('/api/equipment', equipmentRouter);
-app.use('/api/value', valueRouter);
-app.use('/api/variable', variableRouter);
+app.use('/api', routes);
+
 
 try {
   app.listen(PORT, () => {
