@@ -9,17 +9,12 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middlewares
-app.use(cors({
-  origin: 'http://localhost:5173',
-  credentials: true
-}));
+app.use(cors());
 app.use(express.json());
 
 // Rutas
 app.use('/api', routes);
-// app.use('/api/equipment', equipmentRouter);
-// app.use('/api/value', valueRouter);
-// app.use('/api/variable', variableRouter);
+
 
 try {
   app.listen(PORT, () => {

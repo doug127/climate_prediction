@@ -1,8 +1,14 @@
-import express from 'express';
+import express from 'express'
+import sensorRouter from './sensor.routes.js';
 import equipmentRouter from './equipment.routes.js';
-import metaS from './value.routes.js'
-const routes =  express.Router();
+import valueRouter from './value.routes.js';
+import variableRouter from './variable.routes.js'
 
-routes.use('/equpment', equipmentRouter);
-routes.use('/meta', metaS)
+const routes = express.Router();
+
+routes.use('/sensor', sensorRouter);
+routes.use('/equipment', equipmentRouter);
+routes.use('/value', valueRouter);
+routes.use('/variable', variableRouter);
+
 export default routes;
